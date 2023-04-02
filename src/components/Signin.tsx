@@ -7,7 +7,7 @@ import { Link, useNavigate} from 'react-router-dom';
 export default function Signin () {
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
-  const {signin} = useAuth();
+  const {signin, signInWithGoogle} = useAuth();
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
@@ -28,7 +28,21 @@ export default function Signin () {
     }
     setLoading(false);
   }
-  
+  async function handleGoogleSignin (e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+        
+    try{
+      
+      setError('');
+      setLoading(true);
+      await signInWithGoogle();
+        navigate('/');
+    } catch(e) {
+      console.log('signin, problem:',e);
+      setError('Failed to sign in');
+    }
+    setLoading(false);
+  }
   return (
     <>
       <Card>
@@ -50,14 +64,16 @@ export default function Signin () {
             </Button>
           </Form>
         </Card.Body>
-        </Card>
         <div className='w-100 text-center'>
             <Link to="/forgot-password">Forgot Password?</Link>
         </div>
         <div className='w-100 text-center'>
           Need an account? <Link to="/signup">Sign Up</Link>
         </div>
-      
+        <div className='w-100 text-center'>  
+        <Link onClick={handleGoogleSignin} > </Link> <Button className='btn-sm m-2'>Sign In With Google</Button>   
+        </div>    
+        </Card>               
     </>
   );
 }

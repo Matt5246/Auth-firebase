@@ -1,7 +1,7 @@
 // @ts-nocheck
 import * as React from 'react';
-import {auth} from '../config/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateEmail, updatePassword, sendPasswordResetEmail } from 'firebase/auth';
+import {auth,  googleProvider} from '../config/firebase';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateEmail, updatePassword, sendPasswordResetEmail, signInWithPopup } from 'firebase/auth';
 
 const AuthContext = React.createContext({});
 export function useAuth () {
@@ -29,7 +29,11 @@ export function AuthProvider({ children }) {
     function updateMyPassword (password) {
         return updatePassword(currentUser, password);
     }
-
+    function signInWithGoogle(){
+     
+      return signInWithPopup(auth, googleProvider);
+      
+    };
     React.useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
           setCurrentUser(user);  
@@ -46,7 +50,8 @@ export function AuthProvider({ children }) {
       logout,
       resetPassword,
       updateMyEmail,
-      updateMyPassword
+      updateMyPassword,
+      signInWithGoogle
   }
   return (
     <AuthContext.Provider value={value}>

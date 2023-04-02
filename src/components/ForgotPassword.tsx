@@ -21,7 +21,7 @@ export default function ForgotPassword() {
       setLoading(true);
       await resetPassword(emailRef.current?.value);
       setMessage(`Check your inbox for further instructions`)
-      //navigate('/');
+      navigate('/signin');
     } catch(e) {
       setError('Failed to reset password');
     }
